@@ -12,8 +12,7 @@ tracks out of it.
   with [TRACK] held.
 - The choice is not saved: after power-on every track follows again, as in stock.
 
-**Status: prototype.** Tested in the digiemu emulator 0.4.1 (2026-10-14): works. Not run on a
-Model:Cycles yet.
+**Status:** tested on a Model:Cycles and in the digiemu emulator 0.4.1 (2026-10-14): works.
 
 ## Build
 
