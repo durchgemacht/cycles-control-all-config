@@ -1,4 +1,4 @@
-# Control All Config
+# Control All Config V1.0
 
 With this mod, you can select the tracks that are affected by "Control All".
 Compatible with Elektron Model:Cycles, OS 1.13.
