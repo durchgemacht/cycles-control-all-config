@@ -1,18 +1,20 @@
 # Control All Config
 
-A mod for the Elektron Model:Cycles, OS 1.13. Control All works as before: hold [TRACK] and
-turn a knob, and the parameter changes on all six tracks. With this mod you can leave single
-tracks out of it.
+With this mod, you can select the tracks that are affected by "Control All".
+Compatible with Elektron Model:Cycles, OS 1.13.
+
+## How to use
 
 - **[TRACK] + [TRIG 1–6]** takes track 1–6 out of Control All, or puts it back.
 - While [TRACK] is held, **TRIG 1–6 light for the tracks that follow** Control All and stay dark
   for the ones left out.
-- **The active track always follows**, so the knob you turn always does something.
+- **The active track always follows Control All** as it does on the Digiboxes.
 - Left-out tracks also keep their machine, LFO destination and PUNCH/GATE when you change those
   with [TRACK] held.
-- The choice is not saved: after power-on every track follows again, as in stock.
+- The choice is not saved: **after power-on every track follows again**, as in stock.
 
 **Status:** tested on a Model:Cycles and in the digiemu emulator 0.4.1 (2026-10-14): works.
+1.0 is that build, byte for byte; the number says the mod is finished.
 
 ## Build
 
@@ -24,7 +26,7 @@ binutils (Homebrew: `m68k-elf-binutils`).
 python3 build.py --stock model-cycles_OS1.13.syx --tool path/to/elektron-firmware-tool
 ```
 
-This writes `build/model-cycles_OS1.13-control-all-config-v0.1.syx` and a `.json` report. The
+This writes `build/model-cycles_OS1.13-control-all-config-v1.0.syx` and a `.json` report. The
 script checks the SHA-256 of the stock file and the stock bytes under every write. It checks the
 result before keeping it: checksums, HMAC, an independent unpack, and a diff that may touch nothing
 but its writes.

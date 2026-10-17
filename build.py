@@ -34,7 +34,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-VERSION = "0.1"
+VERSION = "1.0"
 HERE = Path(__file__).resolve().parent
 STOCK_SHA256 = "44fe586269631a0ca7da25a3383fc6733c314809505fc3cc52f1e0ed9800640c"   # model-cycles_OS1.13.syx
 TOOL_NAME = "elektron-firmware-tool"
