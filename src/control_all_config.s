@@ -31,7 +31,7 @@
         .equ    EV_FLAGS,          16           | bit 0 down, bit 3 repeat, bit 5 long
 
 
-        .section .cac_a,"ax"
+        .section .cac_state,"ax"
 
         .ascii  "CAC1"
         .globl  cac_mask, cac_held
@@ -42,11 +42,13 @@ cac_held:
         .balign 2
 
 
+        .section .cac_skip,"ax"
+
 | d0 = track 0..5 -> d0 = 1 if Control All leaves it alone, else 0. Keeps d2-d7/a2-a6.
         .globl  cac_skip
 cac_skip:
         moveq   #0,%d1
-        move.b  cac_mask,%d1
+        move.b  cac_mask(%pc),%d1
         btst    %d0,%d1
         beq.s   1f
         move.l  %d0,-(%sp)
@@ -70,10 +72,11 @@ cac_skip:
 | of the stock loop.
 
 | ParameterPageView::controlAll 0x4001d6e4: a turned knob, delta on every track (counter d2).
+        .section .cac_loop1,"ax"
         .globl  cac_loop1
 cac_loop1:
         move.l  %d2,%d0
-        jsr     cac_skip
+        jsr     cac_skip(%pc)
         tst.l   %d0
         bne.s   2f
         move.l  (%a2),%a0               | moved from 0x4001d6f8
@@ -86,10 +89,11 @@ cac_loop1:
         jmp     0x4001d754
 
 | ParameterPageView 0x4001d590: one value on every track, e.g. LFO depth (counter d2).
+        .section .cac_loop2,"ax"
         .globl  cac_loop2
 cac_loop2:
         move.l  %d2,%d0
-        jsr     cac_skip
+        jsr     cac_skip(%pc)
         tst.l   %d0
         bne.s   2f
         move.l  (%a2),%a0               | moved from 0x4001d5a2
@@ -103,10 +107,11 @@ cac_loop2:
         jmp     0x4001d5d8
 
 | ParameterPageView::setLFO 0x4001eaa2: LFO destination on every track (counter a3).
+        .section .cac_loop3,"ax"
         .globl  cac_loop3
 cac_loop3:
         move.l  %a3,%d0
-        jsr     cac_skip
+        jsr     cac_skip(%pc)
         tst.l   %d0
         bne.s   2f
         move.l  (%a2),%a0               | moved from 0x4001ebd2
@@ -119,10 +124,11 @@ cac_loop3:
         jmp     0x4001ebfe
 
 | 0x4001ac4a: [TRACK] + [PUNCH]/[GATE] toggles it on every track (counter d2).
+        .section .cac_loop4,"ax"
         .globl  cac_loop4
 cac_loop4:
         move.l  %d2,%d0
-        jsr     cac_skip
+        jsr     cac_skip(%pc)
         tst.l   %d0
         bne.s   2f
         move.l  %d2,-(%sp)              | moved from 0x4001ac7a
@@ -136,10 +142,11 @@ cac_loop4:
         jmp     0x4001ac8a
 
 | MACHINES 0x400a2712: the machine on every track (counter d2, d4 walks 12-byte records).
+        .section .cac_loop5,"ax"
         .globl  cac_loop5
 cac_loop5:
         move.l  %d2,%d0
-        jsr     cac_skip
+        jsr     cac_skip(%pc)
         tst.l   %d0
         bne.s   2f
         move.l  %d2,-(%sp)              | moved from 0x400a2798
@@ -154,7 +161,7 @@ cac_loop5:
         jmp     0x400a27e2
 
 
-        .section .cac_b,"ax"
+        .section .cac_keys,"ax"
 
 | TrackSelectionView::consumeKeyEvent(view, event) -> d0 = 1 if the key was used.
 | TRIG 1-6 toggle a track; their releases (and repeats) are used only when the press was, so a
@@ -207,6 +214,7 @@ cac_keys:
 
 | TrackSelectionView LED producer (view + 0x68, avail, out): stock lights [TRACK], then
 | TRIG 1-6 light for the tracks that follow Control All and stay dark for the others.
+        .section .cac_leds,"ax"
         .globl  cac_leds
 cac_leds:
         move.l  12(%sp),-(%sp)
